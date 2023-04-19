@@ -1,15 +1,29 @@
+import re
+
+
 class extractor:
 
     def __init__(self, url):
         self.url = self.sanitize(url)
         self.validate()
 
+    def __str__(self):
+        return self.url
+
     def sanitize(self, url):
-        return url.strip()
+        if type(url) == str:
+            return url.strip()
+        else:
+            return ""
 
     def validate(self):
         if not self.url:
             raise ValueError("URL is empty")
+
+        default_url = re.compile("(http(s)?://)?(www.)?money(.com)/exchange")
+        match = default_url.match(self.url)
+        if not match:
+            raise ValueError("URL is invalid")
 
     def get_base_url(self):
         params_range_index = self.url.find("?")
